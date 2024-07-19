@@ -1,215 +1,289 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>k-QR Code Generator</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <title>QR Code Generator</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f0f0f0;
+      font-family: 'Roboto', sans-serif;
+      background-color: #f9f9f9;
       margin: 0;
       padding: 0;
+      transition: background-color 0.3s ease;
+    }
+
+    body.dark-mode {
+      background-color: #111;
+      color: #fff !important;
     }
 
     .container {
-      max-width: 90%;
+      max-width: 600px;
       margin: 50px auto;
-      padding: 20px;
-      background-color: #fff;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
       text-align: center;
-      animation: fadeIn 0.5s ease forwards;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      padding: 0 20px; /* Add padding to the sides */
+      animation: fadeIn 0.5s ease;
     }
 
     h1 {
-      color: #333;
-      animation: fadeIn 0.5s ease forwards;
-      font-size: 2em;
+      font-size: 32px;
+      color: rgb(212, 24, 212);
+      animation: slideIn 0.5s ease;
     }
 
-    .input-container {
-      margin-bottom: 20px;
-      animation: slideIn 0.5s ease forwards;
-    }
-
-    .input-container label {
+    label {
+      font-size: 18px;
       display: block;
-      margin-bottom: 10px;
-      font-weight: bold;
-      font-size: 1.2em;
-      color: #555;
-      text-align: left;
+      margin-top: 20px;
+      animation: fadeIn 0.5s ease;
     }
 
-    .input-container input[type="text"] {
-      width: calc(100% - 24px);
-      padding: 12px;
-      border: 2px solid #ccc;
-      border-radius: 8px;
-      font-size: 1.1em;
-      margin-bottom: 10px;
-      transition: border-color 0.3s ease;
-      box-sizing: border-box;
+    input[type="text"],
+    input[type="number"],
+    select,
+    input[type="color"] {
+      width: calc(100% - 20px);
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      animation: slideIn 0.5s ease;
     }
 
-    .input-container input[type="text"]:focus {
-      outline: none;
-      border-color: #007bff;
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
     }
 
-    .input-container button {
-      width: calc(100% - 24px);
-      padding: 12px;
+    input[type="color"] {
+      padding: 0;
+    }
+
+    button {
+      padding: 10px 20px;
       background-color: #007bff;
       color: #fff;
       border: none;
-      border-radius: 8px;
+      border-radius: 5px;
       cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.3s ease;
-      animation: slideIn 0.5s ease forwards;
-      margin-top: 8px;
-      font-size: 1.1em;
+      font-size: 16px;
+      margin: 10px;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      animation: slideIn 0.5s ease;
     }
 
-    .input-container button i {
-      margin-right: 8px;
-    }
-
-    .input-container button:hover {
+    button:hover {
       background-color: #0056b3;
-      transform: scale(1.05);
+      transform: translateY(-2px);
     }
 
-    .qr-code-container {
+    .qr-preview {
       margin-top: 20px;
-      animation: slideIn 0.5s ease forwards;
+      padding: 20px;
+      border: 1px solid #ccc;
+      background-color: #fff;
+      border-radius: 5px;
+      position: relative;
+      overflow: hidden;
+      animation: slideIn 0.5s ease;
     }
 
-    #qr-code {
+    .qr-preview img {
       max-width: 100%;
       height: auto;
-      margin-top: 20px;
+      display: block;
+      margin: 0 auto;
+      animation: fadeIn 0.5s ease, scaleIn 0.5s ease;
     }
 
-    #download-link {
-      display: none;
+    #message {
+      margin-top: 10px;
+      color: #333;
+      font-size: 18px;
+      animation: slideIn 0.5s ease;
+    }
+
+    #message.dark-mode{
+      color: #fff;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     @keyframes slideIn {
       from {
+        transform: translateY(-20px);
         opacity: 0;
-        transform: translateY(20px);
       }
-
       to {
-        opacity: 1;
         transform: translateY(0);
+        opacity: 1;
       }
     }
 
-    @media screen and (max-width: 600px) {
-      h1 {
-        font-size: 1.8em;
+    @keyframes scaleIn {
+      from {
+        transform: scale(0);
       }
-
-      .input-container label {
-        font-size: 1em;
+      to {
+        transform: scale(1);
       }
+    }
 
-      .input-container input[type="text"] {
-        font-size: 1em;
-        width: calc(100% - 20px);
-      }
+    #mode-toggle {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: transparent;
+      border: none;
+      color: inherit;
+      font-size: 20px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      animation: fadeIn 0.5s ease;
+    }
 
-      .input-container button {
-        font-size: 1em;
-        width: calc(100% - 20px);
+    #mode-toggle:hover {
+      transform: scale(1.2);
+    }
+
+    /* Custom styles for size and color inputs */
+    .size-color-inputs {
+      display: flex;
+      flex-wrap: wrap; /* Allow wrapping for smaller screens */
+      justify-content: space-between;
+      align-items: center;
+      animation: slideIn 0.5s ease;
+    }
+
+    .size-color-inputs label {
+      width: 100%; /* Full width on small screens */
+      margin-bottom: 10px; /* Add space between inputs */
+    }
+
+    .size-color-inputs input[type="number"],
+    .size-color-inputs input[type="color"] {
+      width: 100%; /* Full width on small screens */
+    }
+
+    /* Adjust button margin for smaller screens */
+    @media only screen and (max-width: 480px) {
+      button {
+        margin: 5px; /* Reduce margin for smaller screens */
       }
     }
   </style>
 </head>
-
 <body>
+  <button id="mode-toggle" onclick="toggleDarkMode()">&#9728;</button>
   <div class="container">
-    <h1>k-QR Code Generator</h1>
-    <div class="input-container">
-      <label for="input-text">Enter Text/URL:</label>
-      <input type="text" id="input-text" placeholder="Enter text or URL" aria-label="Enter text or URL">
-      <button id="generate-btn" aria-label="Generate QR Code"><i class="fas fa-qrcode"></i> Generate QR Code</button>
-      <a id="download-link" download="qr-code.png" aria-label="Download QR Code" style="display: none;"><button><i class="fas fa-download"></i> Download QR Code</button></a>
+    <h1 class="title"><i class="fas fa-qrcode"></i> QR Code Generator</h1>
+    <label for="qr-data">Enter Data:</label>
+    <input type="text" id="qr-data" placeholder="Enter text or URL">
+    <div class="size-color-inputs">
+      <label for="qr-size">Size (px):</label>
+      <input type="number" id="qr-size" value="200">
     </div>
-    <div id="qr-code-container" class="qr-code-container" aria-live="polite" aria-atomic="true"></div>
-    <div id="qr-code-analytics" class="qr-code-analytics" style="display: none;">
-      <!-- QR code analytics dashboard here -->
+    <div class="size-color-inputs">
+      <label for="qr-color">Color:</label>
+      <input type="color" id="qr-color" value="#000000">
     </div>
-    <div id="qr-code-options" class="qr-code-options" style="display: none;">
-      <!-- QR code customization options here -->
-    </div>
-    <div id="qr-code-batch" class="qr-code-batch" style="display: none;">
-      <!-- QR code batch generation form here -->
-    </div>
+    <label for="qr-error">Error Correction Level:</label>
+    <select id="qr-error">
+      <option value="L">Low</option>
+      <option value="M" selected>Medium</option>
+      <option value="Q">Quartile</option>
+      <option value="H">High</option>
+    </select>
+    <button id="generate-btn"><i class="fas fa-cogs"></i> Generate QR Code</button>
+    <button id="download-btn"><i class="fas fa-download"></i> Download QR Code</button>
+    <button id="copy-btn"><i class="fas fa-copy"></i> Copy QR Code</button>
+    <div id="qr-preview" class="qr-preview"></div>
+    <div id="message"></div>
   </div>
 
+  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
   <script>
-    document.getElementById('generate-btn').addEventListener('click', function() {
-      generateQRCode();
-    });
-
-    document.getElementById('input-text').addEventListener('keypress', function(event) {
-      if (event.key === 'Enter') {
-        generateQRCode();
-      }
-    });
-
-    function generateQRCode() {
-      var inputText = document.getElementById('input-text').value.trim();
-      var qrCodeContainer = document.getElementById('qr-code-container');
-      if (inputText !== '') {
-        var qrCodeImg = document.createElement('img');
-        qrCodeImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + encodeURIComponent(inputText);
-        qrCodeImg.alt = 'QR Code for ' + inputText;
-        qrCodeImg.onload = function() {
-          qrCodeContainer.innerHTML = '';
-          qrCodeContainer.appendChild(qrCodeImg);
-          document.getElementById('download-link').href = qrCodeImg.src;
-          document.getElementById('download-link').style.display = 'inline-block';
-          document.getElementById('qr-code-analytics').style.display = 'block'; // Show analytics
-          document.getElementById('qr-code-options').style.display = 'block'; // Show customization options
-          document.getElementById('qr-code-batch').style.display = 'block'; // Show batch generation form
-        };
-        qrCodeImg.onerror = function() {
-          qrCodeContainer.innerHTML = '<p>Failed to generate QR Code. Please try again.</p>';
-          document.getElementById('download-link').style.display = 'none';
-          document.getElementById('qr-code-analytics').style.display = 'none';
-          document.getElementById('qr-code-options').style.display = 'none';
-          document.getElementById('qr-code-batch').style.display = 'none';
-        };
-      } else {
-        qrCodeContainer.innerHTML = '<p>Please enter some text or URL to generate QR code.</p>';
-        document.getElementById('download-link').style.display = 'none';
-        document.getElementById('qr-code-analytics').style.display = 'none';
-        document.getElementById('qr-code-options').style.display = 'none';
-        document.getElementById('qr-code-batch').style.display = 'none';
-      }
+    function toggleDarkMode() {
+      const body = document.body;
+      body.classList.toggle('dark-mode');
     }
+
+    document.getElementById('generate-btn').addEventListener('click', function() {
+      var qrData = document.getElementById('qr-data').value;
+      var qrSize = document.getElementById('qr-size').value;
+      var qrColor = document.getElementById('qr-color').value.substr(1); // Remove '#' from color value
+      var qrError = document.getElementById('qr-error').value;
+      var qrPreview = document.getElementById('qr-preview');
+      var message = document.getElementById('message');
+
+      // Clear previous QR code and message
+      qrPreview.innerHTML = '';
+      message.textContent = '';
+
+      // Generate new QR code
+      fetch(`https://api.qrserver.com/v1/create-qr-code/?size=${qrSize}x${qrSize}&data=${encodeURIComponent(qrData)}&color=${qrColor}&error_correction=${qrError}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Failed to generate QR code. Please try again.');
+          }
+          return response.blob();
+        })
+        .then(blob => {
+          var qrImage = document.createElement('img');
+          qrImage.src = URL.createObjectURL(blob);
+          qrImage.alt = 'Generated QR Code';
+          qrPreview.appendChild(qrImage);
+          
+          // Show success message
+          message.textContent = 'QR code generated successfully.';
+        })
+        .catch(error => {
+          // Show error message
+          message.textContent = error.message;
+        });
+    });
+
+    document.getElementById('download-btn').addEventListener('click', function() {
+      var qrImage = document.querySelector('.qr-preview img');
+      if (qrImage) {
+        var link = document.createElement('a');
+        link.href = qrImage.src;
+        link.download = 'qr-code.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Show success message
+        document.getElementById('message').textContent = 'QR code downloaded successfully.';
+      } else {
+        // Show error message
+        document.getElementById('message').textContent = 'Please generate a QR code first.';
+      }
+    });
+
+    document.getElementById('copy-btn').addEventListener('click', function() {
+      var qrImage = document.querySelector('.qr-preview img');
+      if (qrImage) {
+        navigator.clipboard.writeText(qrImage.src)
+          .then(() => {
+            // Show success message
+            document.getElementById('message').textContent = 'QR code URL copied to clipboard.';
+          })
+          .catch(error => {
+            // Show error message
+            document.getElementById('message').textContent = 'Failed to copy QR code URL to clipboard.';
+          });
+      } else {
+        // Show error message
+        document.getElementById('message').textContent = 'Please generate a QR code first.';
+      }
+    });
   </script>
 </body>
-
 </html>
- 
