@@ -4,286 +4,48 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QR Code Generator</title>
-  <style>
-    body {
-      font-family: 'Roboto', sans-serif;
-      background-color: #f9f9f9;
-      margin: 0;
-      padding: 0;
-      transition: background-color 0.3s ease;
-    }
-
-    body.dark-mode {
-      background-color: #111;
-      color: #fff !important;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: 50px auto;
-      text-align: center;
-      padding: 0 20px; /* Add padding to the sides */
-      animation: fadeIn 0.5s ease;
-    }
-
-    h1 {
-      font-size: 32px;
-      color: rgb(212, 24, 212);
-      animation: slideIn 0.5s ease;
-    }
-
-    label {
-      font-size: 18px;
-      display: block;
-      margin-top: 20px;
-      animation: fadeIn 0.5s ease;
-    }
-
-    input[type="text"],
-    input[type="number"],
-    select,
-    input[type="color"] {
-      width: calc(100% - 20px);
-      padding: 10px;
-      margin: 10px 0;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      animation: slideIn 0.5s ease;
-    }
-
-    input[type="number"]::-webkit-inner-spin-button,
-    input[type="number"]::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-
-    input[type="color"] {
-      padding: 0;
-    }
-
-    button {
-      padding: 10px 20px;
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      margin: 10px;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-      animation: slideIn 0.5s ease;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-      transform: translateY(-2px);
-    }
-
-    .qr-preview {
-      margin-top: 20px;
-      padding: 20px;
-      border: 1px solid #ccc;
-      background-color: #fff;
-      border-radius: 5px;
-      position: relative;
-      overflow: hidden;
-      animation: slideIn 0.5s ease;
-    }
-
-    .qr-preview img {
-      max-width: 100%;
-      height: auto;
-      display: block;
-      margin: 0 auto;
-      animation: fadeIn 0.5s ease, scaleIn 0.5s ease;
-    }
-
-    #message {
-      margin-top: 10px;
-      color: #333;
-      font-size: 18px;
-      animation: slideIn 0.5s ease;
-    }
-
-    #message.dark-mode{
-      color: #fff;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    @keyframes slideIn {
-      from {
-        transform: translateY(-20px);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    @keyframes scaleIn {
-      from {
-        transform: scale(0);
-      }
-      to {
-        transform: scale(1);
-      }
-    }
-
-    #mode-toggle {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background-color: transparent;
-      border: none;
-      color: inherit;
-      font-size: 20px;
-      cursor: pointer;
-      transition: transform 0.2s ease;
-      animation: fadeIn 0.5s ease;
-    }
-
-    #mode-toggle:hover {
-      transform: scale(1.2);
-    }
-
-    /* Custom styles for size and color inputs */
-    .size-color-inputs {
-      display: flex;
-      flex-wrap: wrap; /* Allow wrapping for smaller screens */
-      justify-content: space-between;
-      align-items: center;
-      animation: slideIn 0.5s ease;
-    }
-
-    .size-color-inputs label {
-      width: 100%; /* Full width on small screens */
-      margin-bottom: 10px; /* Add space between inputs */
-    }
-
-    .size-color-inputs input[type="number"],
-    .size-color-inputs input[type="color"] {
-      width: 100%; /* Full width on small screens */
-    }
-
-    /* Adjust button margin for smaller screens */
-    @media only screen and (max-width: 480px) {
-      button {
-        margin: 5px; /* Reduce margin for smaller screens */
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js" crossorigin="anonymous"></script>
 </head>
 <body>
-  <button id="mode-toggle" onclick="toggleDarkMode()">&#9728;</button>
   <div class="container">
-    <h1 class="title"><i class="fas fa-qrcode"></i> QR Code Generator</h1>
-    <label for="qr-data">Enter Data:</label>
-    <input type="text" id="qr-data" placeholder="Enter text or URL">
-    <div class="size-color-inputs">
-      <label for="qr-size">Size (px):</label>
-      <input type="number" id="qr-size" value="200">
-    </div>
-    <div class="size-color-inputs">
-      <label for="qr-color">Color:</label>
-      <input type="color" id="qr-color" value="#000000">
-    </div>
-    <label for="qr-error">Error Correction Level:</label>
-    <select id="qr-error">
-      <option value="L">Low</option>
-      <option value="M" selected>Medium</option>
-      <option value="Q">Quartile</option>
-      <option value="H">High</option>
-    </select>
-    <button id="generate-btn"><i class="fas fa-cogs"></i> Generate QR Code</button>
-    <button id="download-btn"><i class="fas fa-download"></i> Download QR Code</button>
-    <button id="copy-btn"><i class="fas fa-copy"></i> Copy QR Code</button>
-    <div id="qr-preview" class="qr-preview"></div>
-    <div id="message"></div>
+    <header>
+      <h1><i class="fas fa-qrcode"></i> QR Code Generator</h1>
+      <button id="mode-toggle"><i class="fas fa-adjust"></i></button>
+    </header>
+    
+    <main>
+      <div class="input-group">
+        <label for="qr-data">Enter Data (URL, text, etc.):</label>
+        <input type="text" id="qr-data" placeholder="Type your text or URL here...">
+      </div>
+
+      <div class="input-group">
+        <label for="qr-size">Size (px):</label>
+        <input type="number" id="qr-size" value="200" min="100" max="500">
+      </div>
+
+      <div class="input-group">
+        <label for="qr-color">Select Color:</label>
+        <input type="color" id="qr-color" value="#000000">
+      </div>
+
+      <button id="generate-btn" class="btn"><i class="fas fa-cogs"></i> Generate QR Code</button>
+
+      <div id="qr-preview" class="qr-preview hidden">
+        <h2>Generated QR Code:</h2>
+        <img id="qr-image" alt="QR Code will be displayed here" />
+        <div class="action-buttons">
+          <button id="download-btn" class="btn"><i class="fas fa-download"></i> Download</button>
+          <button id="copy-btn" class="btn"><i class="fas fa-copy"></i> Copy</button>
+        </div>
+      </div>
+      
+      <div id="message" class="message"></div>
+    </main>
   </div>
 
-  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-  <script>
-    function toggleDarkMode() {
-      const body = document.body;
-      body.classList.toggle('dark-mode');
-    }
-
-    document.getElementById('generate-btn').addEventListener('click', function() {
-      var qrData = document.getElementById('qr-data').value;
-      var qrSize = document.getElementById('qr-size').value;
-      var qrColor = document.getElementById('qr-color').value.substr(1); // Remove '#' from color value
-      var qrError = document.getElementById('qr-error').value;
-      var qrPreview = document.getElementById('qr-preview');
-      var message = document.getElementById('message');
-
-      // Clear previous QR code and message
-      qrPreview.innerHTML = '';
-      message.textContent = '';
-
-      // Generate new QR code
-      fetch(`https://api.qrserver.com/v1/create-qr-code/?size=${qrSize}x${qrSize}&data=${encodeURIComponent(qrData)}&color=${qrColor}&error_correction=${qrError}`)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Failed to generate QR code. Please try again.');
-          }
-          return response.blob();
-        })
-        .then(blob => {
-          var qrImage = document.createElement('img');
-          qrImage.src = URL.createObjectURL(blob);
-          qrImage.alt = 'Generated QR Code';
-          qrPreview.appendChild(qrImage);
-          
-          // Show success message
-          message.textContent = 'QR code generated successfully.';
-        })
-        .catch(error => {
-          // Show error message
-          message.textContent = error.message;
-        });
-    });
-
-    document.getElementById('download-btn').addEventListener('click', function() {
-      var qrImage = document.querySelector('.qr-preview img');
-      if (qrImage) {
-        var link = document.createElement('a');
-        link.href = qrImage.src;
-        link.download = 'qr-code.png';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        
-        // Show success message
-        document.getElementById('message').textContent = 'QR code downloaded successfully.';
-      } else {
-        // Show error message
-        document.getElementById('message').textContent = 'Please generate a QR code first.';
-      }
-    });
-
-    document.getElementById('copy-btn').addEventListener('click', function() {
-      var qrImage = document.querySelector('.qr-preview img');
-      if (qrImage) {
-        navigator.clipboard.writeText(qrImage.src)
-          .then(() => {
-            // Show success message
-            document.getElementById('message').textContent = 'QR code URL copied to clipboard.';
-          })
-          .catch(error => {
-            // Show error message
-            document.getElementById('message').textContent = 'Failed to copy QR code URL to clipboard.';
-          });
-      } else {
-        // Show error message
-        document.getElementById('message').textContent = 'Please generate a QR code first.';
-      }
-    });
-  </script>
+<script src="script.js"></script>
 </body>
 </html>
