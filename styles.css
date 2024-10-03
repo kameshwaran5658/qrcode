@@ -19,7 +19,7 @@ body.dark-mode {
   padding: 20px;
   animation: fadeIn 1s ease-in-out;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
-  background: linear-gradient(45deg, #f0f0f0, #f5f0f0); 
+  background: linear-gradient(45deg, #101010, #1c1c1c);
   border-radius: 8px;
   animation: fadeIn 0.5s ease;
 }
