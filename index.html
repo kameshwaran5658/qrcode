@@ -4,48 +4,60 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QR Code Generator</title>
-  <link rel="stylesheet" href="styles.css">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
-    <header>
+    <div class="header-title">
       <h1><i class="fas fa-qrcode"></i> QR Code Generator</h1>
-      <button id="mode-toggle"><i class="fas fa-adjust"></i></button>
-    </header>
-    
-    <main>
-      <div class="input-group">
-        <label for="qr-data">Enter Data (URL, text, etc.):</label>
-        <input type="text" id="qr-data" placeholder="Type your text or URL here...">
+      <button id="mode-toggle" class="btn btn-outline-secondary">
+        <i id="moon-icon" class="fas fa-moon"></i>
+        <i id="sun-icon" class="fas fa-sun" style="display: none;"></i>
+      </button>
+    </div>
+
+    <div class="row lc">
+      <!-- Left Container -->
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="qr-data">Enter Data (URL, text, etc.):</label>
+          <input type="text" id="qr-data" class="form-control" placeholder="Type your text or URL here...">
+        </div>
+        <div class="form-group">
+          <label for="qr-size">Size (px):</label>
+          <input type="number" id="qr-size" class="form-control" value="200" min="100" max="500">
+        </div>
+        <div class="form-group">
+          <label for="qr-color">Select Color:</label>
+          <input type="color" id="qr-color" class="form-control">
+        </div>
+        <button id="generate-btn" class="btn btn-primary"><i class="fas fa-cogs"></i> Generate QR Code</button>
+        <div id="message" class="alert alert-info mt-3" style="display: none;"></div>
       </div>
 
-      <div class="input-group">
-        <label for="qr-size">Size (px):</label>
-        <input type="number" id="qr-size" value="200" min="100" max="500">
-      </div>
-
-      <div class="input-group">
-        <label for="qr-color">Select Color:</label>
-        <input type="color" id="qr-color" value="#000000">
-      </div>
-
-      <button id="generate-btn" class="btn"><i class="fas fa-cogs"></i> Generate QR Code</button>
-
-      <div id="qr-preview" class="qr-preview hidden">
-        <h2>Generated QR Code:</h2>
-        <img id="qr-image" alt="QR Code will be displayed here" />
-        <div class="action-buttons">
-          <button id="download-btn" class="btn"><i class="fas fa-download"></i> Download</button>
-          <button id="copy-btn" class="btn"><i class="fas fa-copy"></i> Copy</button>
+      <!-- Right Container -->
+      <div class="col-md-6 rc mt-3">
+        <h2 class="text-center mb-3">Generated QR Code:</h2>
+        <div id="qr-preview" class="qr-preview hidden">
+          <img id="qr-image" class="img-fluid" alt="QR Code will be displayed here" />
+          <div class="action-buttons">
+            <button id="download-btn" class="btn btn-success"><i class="fas fa-download"></i> Download</button>
+            <button id="copy-btn" class="btn btn-secondary"><i class="fas fa-copy"></i> Copy</button>
+          </div>
         </div>
       </div>
-      
-      <div id="message" class="message"></div>
-    </main>
+    </div>
   </div>
 
-<script src="script.js"></script>
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

@@ -1,175 +1,60 @@
 body {
   font-family: 'Roboto', sans-serif;
-  background: linear-gradient(45deg, #f0f0f0, #f5f0f0); 
-  margin: 0;
-  padding: 0;
-  color: #333;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  padding: 20px;
+  transition: background-color 0.3s, color 0.3s;
 }
-
-body.dark-mode {
-  background: linear-gradient(45deg, #101010, #1c1c1c);
-  color: #ffffff; 
-}
-
 .container {
-  max-width: 600px;
-  margin: 50px auto;
-  text-align: center;
-  padding: 20px;
-  animation: fadeIn 1s ease-in-out;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
-  background: linear-gradient(45deg, #101010, #1c1c1c);
-  border-radius: 8px;
-  animation: fadeIn 0.5s ease;
+  max-width: 900px;
+  margin: auto;
 }
-
-.container.dark-mode {
-  background: linear-gradient(45deg, #101010, #1312128a); 
-  box-shadow: 0 4px 8px rgba(124, 123, 123, 0.2);
-}
-
-h1 {
-  font-size: 28px;
-  color: #1976d2; 
-  animation: slideIn 0.5s ease;
-  margin-bottom: 20px;
-}
-
-label {
-  font-size: 16px;
-  display: block;
-  margin-top: 15px;
-}
-
-input[type="text"],
-input[type="number"],
-select,
-input[type="color"] {
-  width: 80%;
-  padding: 10px;
-  margin-top: 5px;
-  font-size: 16px;
-  border: 1px solid #ccc; 
-  border-radius: 5px;
-  outline: none;
-  transition: border 0.3s ease;
-}
-
-input[type="text"]:focus,
-input[type="number"]:focus,
-select:focus,
-input[type="color"]:focus {
-  border-color: #1976d2; 
-}
-
-button {
+.header-title {
+  display: flex;
   align-items: center;
-  padding: 12px 20px;
-  background-color: #3f51b5; 
-  color: #ffffff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  margin: 10px 5px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-button:hover {
-  background-color: #303f9f; 
-  transform: translateY(-2px);
-}
-
-.qr-preview {
-  margin-top: 20px;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  border: 1px solid #0fa9f7;
   padding: 20px;
-  background: linear-gradient(45deg, #f0f0f0, #f5f0f0);
-  border-radius: 8px;
-  display: inline-block;
-  color: #101010;
-  border: 1px solid #b0bec5; 
-  animation: slideIn 0.5s ease;
-  position: relative;
+  border-radius: 5px;
 }
-
-.qr-preview img {
-  max-width: 100%;
-  display: block;
-  margin: 0 auto;
+.header-title h1 {
+  margin: 0;
 }
-
-/* Loading spinner */
-.loading-spinner {
-  border: 4px solid #e3f2fd; 
-  border-radius: 50%;
-  border-top: 4px solid #1976d2;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-  margin: 20px auto;
+.qr-preview {
+  text-align: center;
+  margin-top: 20px;
 }
-
-/* Dark mode toggle */
-#mode-toggle {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-  color: #1976d2;
+.hidden {
+  display: none;
 }
-
-#mode-toggle:hover {
-  transform: scale(1.1);
+.action-buttons .btn {
+  margin: 5px;
 }
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.lc, .rc {
+  border: 1px solid #0fa9f7;
+  padding: 15px;
+  border-radius: 5px;
 }
-
-@keyframes slideIn {
-  from { transform: translateY(-20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* RESPONSIVE STYLES */
-@media (max-width: 480px) {
-  .container {
-    padding: 10px;
-    margin: 40px 10px;
-    width: 90%; 
+@media (max-width: 768px) {
+  .header-title h1 {
+    font-size: medium;
   }
-
-  button {
-    width: 100%;
-    margin: 10px 0;
-  }
-
-  input[type="text"],
-  input[type="number"],
-  select,
-  input[type="color"] {
-    width: 90%;
-  }
-
-  h1 {
-    font-size: 22px; 
-  }
-
-  /* Adjust dark mode toggle button positioning */
-  #mode-toggle {
-    font-size: 20px;
-    top: 30px; 
-    right: 150px; 
-  }
+}
+/* Dark Mode Styles */
+.dark-mode {
+  background-color: #121212;
+  color: #ffffff;
+}
+.dark-mode .header-title {
+  border-color: #0fa9f7;
+}
+.dark-mode .lc, .dark-mode .rc {
+  border-color: #0fa9f7;
+}
+.dark-mode .btn-outline-secondary {
+  color: #ffffff;
+  border-color: #ffffff;
+}
+.dark-mode .btn-outline-secondary:hover {
+  background-color: #ffffff;
+  color: #121212;
 }
